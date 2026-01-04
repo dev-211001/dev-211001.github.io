@@ -1,0 +1,126 @@
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="brand">
+      <span class="brand-main">DEV</span>
+      <span class="brand-sub">IT · Systems · Engineering</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/posts/">Posts</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  :root {
+    --bg: #0b0f19;
+    --bg-elevated: #11162a;
+    --border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f3f4f6;
+    --text-secondary: #cbd5e1;
+    --accent: #38bdf8;
+  }
+
+  .navbar {
+    position: sticky;
+    top: clamp(8px, 1.5vh, 16px);
+    z-index: 100;
+    background: linear-gradient(
+      to bottom,
+      var(--bg-elevated),
+      var(--bg)
+    );
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.4rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  /* Brand */
+  .brand {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .brand-main {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+  }
+
+  .brand-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+  }
+
+  /* Nav links */
+  .nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    position: relative;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    opacity: 0.9;
+    transition: opacity 120ms ease;
+  }
+
+  .nav-links a:hover {
+    opacity: 1;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 150ms ease;
+  }
+
+  .nav-links a:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .nav-links {
+      width: 100%;
+      justify-content: space-between;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border);
+    }
+  }
+</style>
