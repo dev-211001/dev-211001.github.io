@@ -1,0 +1,206 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Posts — Dev">
+  <section class="posts">
+    <h1>Posts</h1>
+
+    <p class="intro">
+      Writing focused on clarity, fundamentals, and long-term understanding.
+    </p>
+
+    <!-- SEARCH -->
+    <div class="search">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search posts (English or မြန်မာ)…"
+        aria-label="Search posts"
+      />
+    </div>
+
+    <p id="noResults" class="no-results" hidden>
+      No matching posts found.
+    </p>
+
+    <ul class="post-list" id="postList">
+      {posts.map((post) => (
+        <li
+          class="post-item"
+          data-search={`${post.data.title.en} ${post.data.title.mm} ${post.data.description.en} ${post.data.description.mm}`.toLowerCase()}
+        >
+          <a href={`/posts/${post.slug}/`} class="post-link">
+            <div class="header">
+              <h3>{post.data.title.en}</h3>
+              <span class="date">
+                {post.data.date.toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+
+            <p class="desc">{post.data.description.en}</p>
+            <p class="desc mm">{post.data.description.mm}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- SEARCH LOGIC -->
+  <script>
+    const input = document.getElementById("searchInput");
+    const items = document.querySelectorAll(".post-item");
+    const noResults = document.getElementById("noResults");
+
+    input.addEventListener("input", () => {
+      const query = input.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      items.forEach((item) => {
+        const text = item.dataset.search;
+        const match = text.includes(query);
+
+        item.style.display = match ? "" : "none";
+        if (match) visibleCount++;
+      });
+
+      noResults.hidden = visibleCount !== 0;
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  /* ---------- PAGE ---------- */
+  .posts {
+    max-width: 72ch;
+    margin: 0 auto;
+  }
+
+  .intro {
+    color: var(--text-muted);
+    max-width: 60ch;
+  }
+
+  /* ---------- SEARCH ---------- */
+  .search {
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .search input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+  }
+
+  .search input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search input:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+  }
+
+  /* ---------- NO RESULTS ---------- */
+  .no-results {
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  /* ---------- POST LIST ---------- */
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.8rem;
+  }
+
+  .post-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.015),
+      rgba(255, 255, 255, 0)
+    );
+    transition: border-color 120ms ease, background-color 120ms ease;
+  }
+
+  .post-link {
+    display: block;
+    padding: 1.5rem 1.5rem 1.6rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .post-item:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.03);
+  }
+
+  .post-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+
+  /* ---------- HEADER ---------- */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ---------- DESCRIPTIONS ---------- */
+  .desc {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    max-width: 65ch;
+  }
+
+  .mm {
+    margin-top: 0.25rem;
+    font-size: 0.88rem;
+    opacity: 0.9;
+  }
+
+  /* ---------- ACCESSIBILITY ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+</style>

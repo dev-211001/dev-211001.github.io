@@ -1,0 +1,59 @@
+:root {
+  /* Colors */
+  --bg: #0b0f19;
+  --bg-elevated: #11162a;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #38bdf8;
+
+  /* Typography */
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  line-height: 1.65;
+}
+
+a {
+  color: inherit;
+}
+
+main {
+  max-width: 72ch;
+  margin: 0 auto;
+  padding: clamp(6rem, 12vh, 9rem) 1.5rem 5rem;
+}
+
+p {
+  margin: 0.9rem 0 0;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 6vw, 4rem);
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
