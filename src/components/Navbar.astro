@@ -1,3 +1,12 @@
+---
+const pathname = Astro.url.pathname;
+
+const isActive = (href) => {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+};
+---
+
 <nav class="navbar">
   <div class="container">
     <a href="/" class="brand">
@@ -6,9 +15,17 @@
     </a>
 
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/posts/">Posts</a></li>
-      <li><a href="/contact/">Contact</a></li>
+      <li>
+        <a href="/" class={isActive("/") ? "active" : ""}>Home</a>
+      </li>
+      <li>
+        <a href="/posts/" class={isActive("/posts") ? "active" : ""}>Posts</a>
+      </li>
+      <li>
+        <a href="/contact/" class={isActive("/contact") ? "active" : ""}>
+          Contact
+        </a>
+      </li>
     </ul>
   </div>
 </nav>
@@ -37,6 +54,7 @@
     text-decoration: none;
     display: flex;
     flex-direction: column;
+    color: var(--text-main);
   }
 
   .brand-main {
@@ -64,9 +82,31 @@
     position: relative;
     text-decoration: none;
     font-weight: 600;
-    opacity: 0.9;
+    color: var(--text-main);
+    opacity: 0.85;
+    transition: opacity 120ms ease;
   }
 
+  .nav-links a:hover {
+    opacity: 1;
+  }
+
+  /* 🔥 ACTIVE STATE (GLOBAL to bypass Astro scoping) */
+  :global(.nav-links a.active) {
+    opacity: 1;
+  }
+
+  :global(.nav-links a.active)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  /* Hover underline */
   .nav-links a::after {
     content: "";
     position: absolute;
