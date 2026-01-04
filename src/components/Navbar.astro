@@ -1,7 +1,7 @@
 ---
 const pathname = Astro.url.pathname;
 
-const isActive = (href) => {
+const isActive = (href: string) => {
   if (href === "/") return pathname === "/";
   return pathname.startsWith(href);
 };
@@ -31,6 +31,7 @@ const isActive = (href) => {
 </nav>
 
 <style>
+  /* ---------- NAVBAR ---------- */
   .navbar {
     position: sticky;
     top: clamp(8px, 1.5vh, 16px);
@@ -50,6 +51,7 @@ const isActive = (href) => {
     gap: 2rem;
   }
 
+  /* ---------- BRAND ---------- */
   .brand {
     text-decoration: none;
     display: flex;
@@ -70,6 +72,7 @@ const isActive = (href) => {
     margin-top: 0.1rem;
   }
 
+  /* ---------- NAV LINKS ---------- */
   .nav-links {
     list-style: none;
     display: flex;
@@ -91,22 +94,7 @@ const isActive = (href) => {
     opacity: 1;
   }
 
-  /* 🔥 ACTIVE STATE (GLOBAL to bypass Astro scoping) */
-  :global(.nav-links a.active) {
-    opacity: 1;
-  }
-
-  :global(.nav-links a.active)::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -7px;
-    width: 100%;
-    height: 2px;
-    background: var(--accent);
-  }
-
-  /* Hover underline */
+  /* Underline (shared by hover + active) */
   .nav-links a::after {
     content: "";
     position: absolute;
@@ -120,10 +108,21 @@ const isActive = (href) => {
     transition: transform 150ms ease;
   }
 
+  /* Hover underline */
   .nav-links a:hover::after {
     transform: scaleX(1);
   }
 
+  /* ✅ ACTIVE STATE (THIS IS THE KEY PART) */
+  .nav-links a.active {
+    opacity: 1;
+  }
+
+  .nav-links a.active::after {
+    transform: scaleX(1);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
   @media (max-width: 720px) {
     .container {
       flex-direction: column;
